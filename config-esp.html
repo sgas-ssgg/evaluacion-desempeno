@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurar Especialidad — APTIM Pisco</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app-header"></div>
+  <main class="form-container">
+    <div class="card">
+      <p style="font-size:0.78rem;color:var(--texto-medio);margin-bottom:1rem;">
+        Edite los textos de los ítems. Al guardar, el formulario usará las nuevas descripciones.
+      </p>
+      <div id="items-container"></div>
+      <div style="margin-top:1rem;display:flex;justify-content:flex-end;gap:0.6rem;">
+        <a href="configuracion.html" class="btn-secondary">Cancelar</a>
+        <button class="btn-primary" id="btn-guardar">💾 Guardar Cambios</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params  = new URLSearchParams(window.location.search);
+      const idx     = parseInt(params.get('idx') || '0');
+      const espList = JSON.parse(localStorage.getItem('especialidades') || '[]');
+      const esp     = espList[idx];
+
+      if (!esp) {
+        document.getElementById('items-container').innerHTML =
+          '<p style="color:red">Especialidad no encontrada.</p>';
+        return;
+      }
+
+      EvalApp.renderPageHeader('app-header', {
+        title: `Editar Ítems — ${esp.nombre}`,
+        backHref: 'configuracion.html'
+      });
+
+      // Renderizar ítems de la especialidad
+      const cont = document.getElementById('items-container');
+      const items = JSON.parse(localStorage.getItem(`items_esp_${esp.nombre}`) || 'null') || esp.items;
+      cont.innerHTML = items.map((it, i) => `
+        <div class="config-item-row">
+          <div class="config-item-num">${i + 1}</div>
+          <input class="config-item-input" id="esp-item-${i}" type="text"
+            value="${(it.descripcion || it).replace(/"/g,'&quot;')}"
+            placeholder="Ítem ${i + 1}">
+        </div>`).join('');
+
+      document.getElementById('btn-guardar').addEventListener('click', () => {
+        const nuevos = items.map((_, i) => {
+          const el = document.getElementById(`esp-item-${i}`);
+          return { numero: i + 1, descripcion: el ? el.value.trim() : '' };
+        });
+        if (nuevos.some(it => !it.descripcion)) {
+          alert('⚠️ Todos los ítems deben tener descripción.'); return;
+        }
+        localStorage.setItem(`items_esp_${esp.nombre}`, JSON.stringify(nuevos));
+        alert(`✔ Ítems de ${esp.nombre} guardados.`);
+        window.location.href = 'configuracion.html';
+      });
+    });
+  </script>
+</body>
+</html>

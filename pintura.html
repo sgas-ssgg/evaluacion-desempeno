@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluación Pintura — APTIM Pisco</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="form-container">
+
+    <!-- Selector de trabajador -->
+    <div id="dni-section"></div>
+
+    <!-- Datos generales -->
+    <div class="card" id="datos-card" style="display:none">
+      <div class="datos-generales">
+        <div class="field">
+          <label for="fecha">Fecha de Evaluación</label>
+          <input type="date" id="fecha">
+        </div>
+        <div class="field">
+          <label for="supervisor">Supervisor / Técnico / Evaluador</label>
+          <input type="text" id="supervisor" placeholder="Nombre del supervisor">
+        </div>
+      </div>
+    </div>
+
+    <!-- Ítems técnicos -->
+    <div id="items-section" style="display:none">
+      <div class="section-title">Evaluación Técnica — 16 Ítems &nbsp;|&nbsp; 0 = Cumple &nbsp; 1-3 = Penalización</div>
+      <div id="items-container" style="margin-top:0.4rem;"></div>
+    </div>
+
+    <!-- Faltas y Sanciones -->
+    <div class="card" id="faltas-card" style="display:none">
+      <div class="totales-grid">
+        <div class="field">
+          <label for="faltas">No Cumple — Faltas Leves (auto)</label>
+          <input type="number" id="faltas" min="0" value="0" readonly
+            style="background:#fff8e1;cursor:default;font-weight:700;color:#f57f17;">
+        </div>
+        <div class="field">
+          <label for="sanciones">Falta Grave — Sanciones (auto)</label>
+          <input type="number" id="sanciones" min="0" value="0" readonly
+            style="background:#fff5f5;cursor:default;font-weight:700;color:#c62828;">
+        </div>
+      </div>
+      <p style="font-size:0.68rem;color:var(--texto-suave);margin-top:0.5rem;">
+        Se calculan automáticamente: score 1-2 = falta leve · score 3 = sanción grave
+      </p>
+    </div>
+
+    <!-- Resultado -->
+    <div class="resultado-box" id="resultado-box" style="display:none">
+      <div class="resultado-label">% Técnico del Día</div>
+      <div class="resultado-valor res-green" id="resultado-valor">100.00%</div>
+      <div class="resultado-sub">Se actualiza en tiempo real</div>
+    </div>
+
+    <!-- Botones -->
+    <div class="botones-accion" id="botones-accion" style="display:none">
+      <button class="btn-primary" id="btn-guardar">💾 Guardar Evaluación</button>
+      <button class="btn-secondary" id="btn-limpiar">🔄 Limpiar</button>
+      <a href="index.html" class="btn-secondary">← Volver</a>
+    </div>
+
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/pintura.js"></script>
+</body>
+</html>

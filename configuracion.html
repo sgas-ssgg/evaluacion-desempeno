@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración — APTIM Pisco</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #91B7CC; min-height: 100vh; }
+
+    .config-menu-area {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 1.8rem 1.2rem 3rem;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .config-ficha {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.5rem;
+      background: #416A83;
+      border: 2px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1rem 0.6rem;
+      aspect-ratio: 1 / 1;
+      text-decoration: none;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      text-align: center; line-height: 1.35;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s, border-color 0.15s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    .config-ficha:hover {
+      background: #4f7d9a;
+      border-color: rgba(255,255,255,0.4);
+      transform: translateY(-3px);
+    }
+    .config-ficha:active { transform: translateY(0); }
+
+    @media (max-width: 480px) {
+      .config-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <div class="config-menu-area">
+    <nav class="config-grid" id="config-grid">
+
+      <a href="config-pintura.html" class="config-ficha">
+        Ítems<br>Pintura
+      </a>
+
+      <a href="config-andamios.html" class="config-ficha">
+        Ítems<br>Andamios
+      </a>
+
+      <!-- Fichas dinámicas se insertan aquí -->
+
+    </nav>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      EvalApp.renderPageHeader('app-header', {
+        title: 'Configuración',
+        backHref: 'index.html'
+      });
+
+      // Agregar fichas de especialidades dinámicas
+      const grid    = document.getElementById('config-grid');
+      const espList = JSON.parse(localStorage.getItem('especialidades') || '[]');
+      espList.forEach((esp, idx) => {
+        const a = document.createElement('a');
+        a.href = `config-esp.html?idx=${idx}`;
+        a.className = 'config-ficha';
+        a.textContent = `Ítems\n${esp.nombre}`;
+        a.innerHTML = `Ítems<br>${esp.nombre}`;
+        grid.appendChild(a);
+      });
+    });
+  </script>
+</body>
+</html>

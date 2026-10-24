@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicios Generales — APTIM Pisco</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { overflow: hidden; background: #0d1b2a; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+    body.cargado { overflow: auto; }
+
+    /* ══ SPLASH ══ */
+    #splash {
+      position: fixed; inset: 0; background: #0d1b2a;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999; transition: opacity 0.7s ease;
+    }
+    #splash.oculto { opacity: 0; pointer-events: none; }
+    .logo-escena {
+      position: relative; width: 320px; height: 320px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-destello {
+      position: absolute; inset: -40px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(102,153,181,0.35) 0%, rgba(65,106,131,0.18) 40%, transparent 70%);
+      animation: destelloPulso 1.5s 0.3s ease-in-out infinite alternate;
+    }
+    @keyframes destelloPulso { from{transform:scale(0.9);opacity:0.7} to{transform:scale(1.15);opacity:1} }
+    .logo-anillo {
+      position: absolute; width: 350px; height: 350px; border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #91B7CC; border-right-color: rgba(102,153,181,0.4);
+      opacity: 0; animation: girarAnillo 2.5s 0.2s linear infinite, fadeA 0.5s 0.2s forwards;
+    }
+    .logo-anillo2 {
+      position: absolute; width: 315px; height: 315px; border-radius: 50%;
+      border: 1px solid transparent;
+      border-bottom-color: rgba(145,183,204,0.5); border-left-color: rgba(145,183,204,0.2);
+      opacity: 0; animation: girarAnillo2 3.5s 0.2s linear infinite, fadeA 0.5s 0.2s forwards;
+    }
+    @keyframes girarAnillo  { to { transform: rotate(360deg); } }
+    @keyframes girarAnillo2 { to { transform: rotate(-360deg); } }
+    @keyframes fadeA        { to { opacity: 1; } }
+    #logo-img {
+      width: 280px; height: 280px; object-fit: contain; border-radius: 0;
+      position: relative; z-index: 2; opacity: 0; transform: scale(0.72);
+      animation: logoAppear 0.6s 0.15s cubic-bezier(0.34,1.56,0.64,1) forwards;
+      image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;
+    }
+    @keyframes logoAppear { to { opacity: 1; transform: scale(1); } }
+    .splash-label {
+      margin-top: 1.5rem; color: #6699B5; font-size: 0.76rem;
+      letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500;
+      opacity: 0; animation: fadeInLabel 0.5s 0.6s forwards;
+    }
+    @keyframes fadeInLabel { to { opacity: 1; } }
+
+    /* ══ MENÚ PRINCIPAL ══ */
+    #menu-principal {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 0;
+      background: #91B7CC;
+      opacity: 0; transition: opacity 0.8s ease;
+    }
+    #menu-principal.visible { opacity: 1; }
+
+    /* Banda superior con título */
+    .menu-header {
+      width: 100%;
+      background: #416A83;
+      padding: 1.2rem 1.5rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+    }
+    .menu-header-logo {
+      width: 64px; height: 64px;
+      object-fit: contain;
+      flex-shrink: 0;
+      image-rendering: crisp-edges;
+    }
+    .menu-header-texto {
+      text-align: left;
+    }
+    .menu-titulo {
+      font-size: 1.4rem; font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5), 1px 1px 0 #1a2e3d;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 0.15rem;
+    }
+    .menu-linea {
+      width: 40px; height: 3px;
+      background: #91B7CC; border-radius: 2px;
+      margin: 0.3rem 0 0.3rem;
+    }
+    .menu-subtitulo {
+      font-size: 0.72rem; font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+
+    /* Área de fichas */
+    .menu-fichas-area {
+      flex: 1; width: 100%;
+      padding: 2rem 1.5rem;
+      display: flex; align-items: flex-start; justify-content: center;
+    }
+
+    /* Grid fichas — 4 por fila */
+    .fichas-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      width: 100%;
+      max-width: 540px;
+    }
+
+    .ficha {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.6rem;
+      background: #416A83;
+      border: 2px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 1rem 0.6rem;
+      aspect-ratio: 1 / 1;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 0.78rem; font-weight: 700;
+      text-align: center; line-height: 1.4;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.7), 0 0 10px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .ficha:hover {
+      background: #4f7d9a;
+      border-color: rgba(255,255,255,0.45);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .ficha:active { transform: translateY(0); }
+
+    /* SVG relieve blanco — eliminado */
+
+    .ficha-nueva {
+      background: #2e5068;
+      border-color: rgba(145,183,204,0.3);
+      border-style: dashed;
+      color: #c8e0ee;
+    }
+    .ficha-nueva:hover { background: #3a6380; border-color: rgba(255,255,255,0.4); border-style: solid; color: #fff; }
+    .ficha-config {
+      background: #253d52;
+      border-color: rgba(145,183,204,0.2);
+      border-style: dashed;
+      color: #91B7CC;
+    }
+    .ficha-config:hover { background: #2e5068; border-color: rgba(255,255,255,0.3); border-style: solid; color: #fff; }
+
+    @media (max-width: 480px) {
+      .fichas-grid { grid-template-columns: repeat(2, 1fr); max-width: 280px; }
+      .menu-titulo { font-size: 1.2rem; }
+      .ficha svg { width: 36px; height: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ SPLASH ══ -->
+  <div id="splash">
+    <div class="logo-escena">
+      <div class="logo-destello"></div>
+      <div class="logo-anillo"></div>
+      <div class="logo-anillo2"></div>
+      <img id="logo-img" src="assets/logo-transp.png" alt="Servicios Generales">
+    </div>
+    <div class="splash-label">Servicios Generales — APTIM Pisco</div>
+  </div>
+
+  <!-- ══ MENÚ PRINCIPAL ══ -->
+  <div id="menu-principal">
+
+    <!-- Título arriba -->
+    <div class="menu-header">
+      <img src="assets/logo-transp.png" alt="Logo" class="menu-header-logo">
+      <div class="menu-header-texto">
+        <h1 class="menu-titulo">Medidor de Desempeño Total</h1>
+        <div class="menu-linea"></div>
+        <p class="menu-subtitulo">Servicios Generales — APTIM Pisco</p>
+      </div>
+    </div>
+
+    <!-- Fichas abajo -->
+    <div class="menu-fichas-area">
+      <nav class="fichas-grid" id="fichas-container">
+
+        <!-- PINTURA -->
+        <a href="pintura.html" class="ficha">
+          <span>Evaluación<br>Pintura</span>
+        </a>
+
+        <!-- ANDAMIOS -->
+        <a href="andamios.html" class="ficha">
+          <span>Evaluación<br>Andamios</span>
+        </a>
+
+        <!-- Especialidades dinámicas se insertan aquí -->
+
+        <!-- NUEVA ESPECIALIDAD -->
+        <a href="nueva-especialidad.html" class="ficha ficha-nueva">
+          <span>Nueva<br>Especialidad</span>
+        </a>
+
+        <!-- CONFIGURACIÓN -->
+        <a href="configuracion.html" class="ficha ficha-config">
+          <span>Configuración</span>
+        </a>
+
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    function tocarSonido() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [[440,0],[554,0.2],[659,0.4],[880,0.65]].forEach(([freq,t]) => {
+          const osc=ctx.createOscillator(), g=ctx.createGain();
+          osc.connect(g); g.connect(ctx.destination);
+          osc.type='sine'; osc.frequency.value=freq;
+          const st=ctx.currentTime+t;
+          g.gain.setValueAtTime(0,st);
+          g.gain.linearRampToValueAtTime(0.09,st+0.06);
+          g.gain.exponentialRampToValueAtTime(0.001,st+0.8);
+          osc.start(st); osc.stop(st+0.8);
+        });
+      } catch(e){}
+    }
+
+    function cargarEspecialidades() {
+      const cont   = document.getElementById('fichas-container');
+      const btnNueva = cont.querySelector('.ficha-nueva');
+      JSON.parse(localStorage.getItem('especialidades')||'[]').forEach(esp => {
+        const a = document.createElement('a');
+        a.href = `eval-dinamico.html?esp=${encodeURIComponent(esp.nombre)}`;
+        a.className = 'ficha';
+        a.innerHTML = `
+          <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke="white" stroke-opacity="0.7" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="18" fill="white" fill-opacity="0.85">${esp.icono||'📋'}</text></svg>
+          <span>Eval.<br>${esp.nombre}</span>`;
+        cont.insertBefore(a, btnNueva);
+      });
+    }
+
+    function mostrarMenu() {
+      document.getElementById('splash').classList.add('oculto');
+      document.getElementById('menu-principal').classList.add('visible');
+      document.body.classList.add('cargado');
+    }
+
+    cargarEspecialidades();
+
+    if (sessionStorage.getItem('splash_visto')) {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('menu-principal').style.opacity = '1';
+      document.getElementById('menu-principal').classList.add('visible');
+      document.body.classList.add('cargado');
+    } else {
+      sessionStorage.setItem('splash_visto','1');
+      tocarSonido();
+      setTimeout(mostrarMenu, 3200);
+    }
+  </script>
+</body>
+</html>

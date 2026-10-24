@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurar Andamios — APTIM Pisco</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app-header"></div>
+  <main class="form-container">
+    <div class="card">
+      <p style="font-size:0.78rem;color:var(--texto-medio);margin-bottom:1rem;">
+        Edite los textos de los ítems. Al guardar, el formulario de evaluación usará las nuevas descripciones.
+      </p>
+      <div id="items-container"></div>
+      <div style="margin-top:1rem;display:flex;justify-content:flex-end;gap:0.6rem;">
+        <a href="configuracion.html" class="btn-secondary">Cancelar</a>
+        <button class="btn-primary" id="btn-guardar">💾 Guardar Cambios</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      EvalApp.renderPageHeader('app-header', {
+        title: 'Editar Ítems — Andamios',
+        backHref: 'configuracion.html'
+      });
+      renderConfigItems('items-container', 'andamios');
+      document.getElementById('btn-guardar').addEventListener('click', () => guardarItems('andamios'));
+    });
+  </script>
+</body>
+</html>
