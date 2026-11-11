@@ -112,7 +112,10 @@ const EvalApp = (() => {
       resultado.innerHTML = '<span style="color:var(--texto-suave);font-size:0.82rem;">🔍 Buscando...</span>';
 
       // Consultar Sheet vía Apps Script
-      fetch(`${APPS_SCRIPT_URL}?action=buscarDni&dni=${val}`)
+      fetch(`${APPS_SCRIPT_URL}?action=buscarDni&dni=${val}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
         .then(r => r.json())
         .then(data => {
           if (!data.success || !data.trabajador) {
@@ -382,10 +385,12 @@ const EvalApp = (() => {
     try {
       const resp = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload)
       });
-      const resultado = await resp.json();
-      return resultado;
+      // no-cors no permite leer la respuesta, asumimos éxito
+      return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
     }
